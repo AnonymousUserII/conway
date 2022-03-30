@@ -8,9 +8,9 @@ _HEIGHT: int = 30;
 
 # Quality of Life
 _SHOW_EMOJIS: bool = True  # Won't show emojis if running windows
-_AUTOSTOP: bool = False
+_AUTOSTOP: bool = True
 _AUTOPLAY: bool = True
-_REST_IN_SECONDS: float = 0.1
+_REST_IN_SECONDS: float = 1
 
 
 def strmap(map: list[list[bool]]) -> str:
@@ -57,45 +57,45 @@ def main() -> None:
     game_map: list[list[bool]] = [[False for _ in range(_LENGTH)] for _ in range(_HEIGHT)]
 
     # Preset Glider Gun
-    game_map[4][0] = True
-    game_map[4][1] = True
-    game_map[5][0] = True
-    game_map[5][1] = True
+    game_map[5][2] = True
+    game_map[5][3] = True
+    game_map[6][2] = True
+    game_map[6][3] = True
+
+    game_map[3][36] = True
+    game_map[3][37] = True
+    game_map[4][36] = True
+    game_map[4][37] = True
     
-    game_map[2][34] = True
-    game_map[2][35] = True
-    game_map[3][34] = True
-    game_map[3][35] = True
-    
-    game_map[0][24] = True
-    game_map[1][24] = True
-    game_map[5][24] = True
+    game_map[1][26] = True
+    game_map[2][26] = True
+    game_map[6][26] = True
+    game_map[7][26] = True
+    game_map[2][24] = True
     game_map[6][24] = True
-    game_map[1][22] = True
+    game_map[3][23] = True
+    game_map[4][23] = True
+    game_map[5][23] = True
+    game_map[3][22] = True
+    game_map[4][22] = True
     game_map[5][22] = True
-    game_map[2][21] = True
-    game_map[3][21] = True
-    game_map[4][21] = True
-    game_map[2][20] = True
-    game_map[3][20] = True
-    game_map[4][20] = True
     
-    game_map[5][17] = True
-    game_map[4][16] = True
-    game_map[5][16] = True
+    game_map[6][19] = True
+    game_map[5][18] = True
+    game_map[6][18] = True
+    game_map[7][18] = True
+    game_map[4][17] = True
+    game_map[8][17] = True
     game_map[6][16] = True
     game_map[3][15] = True
-    game_map[7][15] = True
-    game_map[5][14] = True
-    game_map[2][13] = True
+    game_map[9][15] = True
+    game_map[3][14] = True
+    game_map[9][14] = True
+    game_map[4][13] = True
     game_map[8][13] = True
-    game_map[2][12] = True
-    game_map[8][12] = True
-    game_map[3][11] = True
-    game_map[7][11] = True
-    game_map[4][10] = True
-    game_map[5][10] = True
-    game_map[6][10] = True
+    game_map[5][12] = True
+    game_map[6][12] = True
+    game_map[7][12] = True
     
     
     if _AUTOSTOP:
@@ -112,7 +112,7 @@ def main() -> None:
                 end_message = "Game reached stable loop"
                 break
             game_history.append(deepcopy(game_map))
-        elif _AUTOPLAY:
+        if _AUTOPLAY:
             sleep(_REST_IN_SECONDS)
         elif input():
             end_message = "Player Halted"
