@@ -8,6 +8,7 @@ _HEIGHT: int = 20;
 
 # Quality of Life
 _SHOW_EMOJIS: bool = True  # Won't show emojis if running windows
+_AUTOSTOP: bool = False
 _AUTOPLAY: bool = True
 _REST_IN_SECONDS: float = 0.3
 
@@ -85,7 +86,7 @@ def main() -> None:
         game_map = next_round(game_map)
         game_history.append(deepcopy(game_map))
         
-        if game_map in game_history[:-1]:  # If specific map has already occurred, it will loop
+        if _AUTOSTOP and game_map in game_history[:-1]:  # If specific map has already occurred, it will loop
             end_message = "Game reached stable loop"
             break
         elif _AUTOPLAY:
