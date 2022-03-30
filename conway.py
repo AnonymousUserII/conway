@@ -7,7 +7,7 @@ _HEIGHT: int = 30;
 _LENGTH: int = 30;
 
 # Quality of Life
-_SHOW_EMOJIS: bool = True  # Won't show emojis if running windows
+_SHOW_EMOJIS: bool = False  # Won't show emojis if running windows
 _AUTOSTOP: bool = True
 _AUTOPLAY: bool = True
 _REST_IN_SECONDS: float = 0.1
@@ -20,9 +20,9 @@ def strmap(map: list[list[bool]]) -> str:
     for x in map:
         for y in x:
             if y:
-                output += '#' if os.name == "nt" or not _SHOW_EMOJIS else '⬛️'
+                output += '# ' if os.name == "nt" or not _SHOW_EMOJIS else '⬛️'
             else:
-                output += '.' if os.name == "nt" or not _SHOW_EMOJIS else '⬜️'
+                output += '. ' if os.name == "nt" or not _SHOW_EMOJIS else '⬜️'
         output += '\n'
     
     return output
