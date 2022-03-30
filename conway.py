@@ -1,6 +1,4 @@
 import os
-os.system("cls" if os.name == "nt" else "clear")
-
 from time import sleep
 from copy import deepcopy
 
@@ -16,7 +14,6 @@ _REST_IN_SECONDS: float = 0.3
 
 def strmap(map: list[list[bool]]) -> str:
     output: str = ""
-    
     for y in map:
         for x in y:
             if x:
@@ -30,32 +27,23 @@ def strmap(map: list[list[bool]]) -> str:
 
 def will_be_alive(x: int, y: int, map: list[list[bool]]) -> True:
     alive_neighbours: int = 0
-    
     y_bounds: set[int] = {-1 if y > 0 else 0, 0, 1 if (y < _HEIGHT - 1) else 0}
     x_bounds: set[int] = {-1 if x > 0 else 0, 0, 1 if (x < _LENGTH - 1) else 0}
     
     # Check for neighbours
     for y_offset in y_bounds:
         for x_offset in x_bounds:
-            if y_offset == 0 and x_offset == 0: continue  # If it is the square itself, skip
             if map[y + y_offset][x + x_offset]:
                 alive_neighbours += 1
     
-    if map[y][x]:
-        if alive_neighbours == 2 or alive_neighbours == 3:
-            return True
-        else:
-            return False
+    if map[y][x]:  # If tile is alive
+        return alive_neighbours - 1 in [2, 3]  # Account for itself
     else:
-        if alive_neighbours == 3:
-            return True
-        else:
-            return False
+        return alive_neighbours == 3
 
 
 def next_round(map: list[list[bool]]) -> list[list[bool]]:
     old_map: list[list[bool]] = deepcopy(map)
-
     for y in range(_HEIGHT):
         for x in range(_LENGTH):
             map[y][x] = will_be_alive(x, y, old_map)
@@ -64,7 +52,7 @@ def next_round(map: list[list[bool]]) -> list[list[bool]]:
 
 
 def main() -> None: 
-    # Set all tiles to dead
+    # Set all initial tiles to dead
     game_map: list[list[bool]] = [[False for _ in range(_LENGTH)] for _ in range(_HEIGHT)]
 
     ## Presets
@@ -88,16 +76,15 @@ def main() -> None:
     game_map[5][4] = True
     game_map[5][5] = True
     
-    
-    game_history: list[list[list[bool]]] = deepcopy(game_map)  # Stores all maps during this simulation
+    game_history: list[list[list[bool]]] = [deepcopy(game_map)]  # Stores all maps during this simulation
     end_message: str
     
     while True:
         os.system("cls" if os.name == "nt" else "clear")
         print(strmap(game_map))
         game_map = next_round(game_map)
-        
         game_history.append(deepcopy(game_map))
+        
         if game_map in game_history[:-1]:  # If specific map has already occurred, it will loop
             end_message = "Game reached stable loop"
             break
