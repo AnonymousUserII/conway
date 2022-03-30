@@ -1,4 +1,3 @@
-from glob import glob
 import os
 from time import sleep
 from copy import deepcopy
