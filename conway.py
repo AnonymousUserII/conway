@@ -3,14 +3,14 @@ from time import sleep
 from copy import deepcopy
 
 # Dimensions of fields
-_LENGTH: int = 20;
-_HEIGHT: int = 20;
+_LENGTH: int = 40;
+_HEIGHT: int = 30;
 
 # Quality of Life
 _SHOW_EMOJIS: bool = True  # Won't show emojis if running windows
 _AUTOSTOP: bool = False
 _AUTOPLAY: bool = True
-_REST_IN_SECONDS: float = 0.3
+_REST_IN_SECONDS: float = 0.1
 
 
 def strmap(map: list[list[bool]]) -> str:
@@ -56,39 +56,62 @@ def main() -> None:
     # Set all initial tiles to dead
     game_map: list[list[bool]] = [[False for _ in range(_LENGTH)] for _ in range(_HEIGHT)]
 
-    ## Presets
-    # Glider 1
-    game_map[7][8] = True
-    game_map[8][6] = True
-    game_map[8][8] = True
-    game_map[9][7] = True
-    game_map[9][8] = True
+    # Preset Glider Gun
+    game_map[4][0] = True
+    game_map[4][1] = True
+    game_map[5][0] = True
+    game_map[5][1] = True
     
-    # Glider 2
-    game_map[12][8] = True
-    game_map[13][6] = True
-    game_map[13][8] = True
-    game_map[14][7] = True
-    game_map[14][8] = True
+    game_map[2][34] = True
+    game_map[2][35] = True
+    game_map[3][34] = True
+    game_map[3][35] = True
     
-    # T-Piece
-    game_map[4][5] = True
-    game_map[5][3] = True
-    game_map[5][4] = True
-    game_map[5][5] = True
+    game_map[0][24] = True
+    game_map[1][24] = True
+    game_map[5][24] = True
+    game_map[6][24] = True
+    game_map[1][22] = True
+    game_map[5][22] = True
+    game_map[2][21] = True
+    game_map[3][21] = True
+    game_map[4][21] = True
+    game_map[2][20] = True
+    game_map[3][20] = True
+    game_map[4][20] = True
     
-    game_history: list[list[list[bool]]] = [deepcopy(game_map)]  # Stores all maps during this simulation
+    game_map[5][17] = True
+    game_map[4][16] = True
+    game_map[5][16] = True
+    game_map[6][16] = True
+    game_map[3][15] = True
+    game_map[7][15] = True
+    game_map[5][14] = True
+    game_map[2][13] = True
+    game_map[8][13] = True
+    game_map[2][12] = True
+    game_map[8][12] = True
+    game_map[3][11] = True
+    game_map[7][11] = True
+    game_map[4][10] = True
+    game_map[5][10] = True
+    game_map[6][10] = True
+    
+    
+    if _AUTOSTOP:
+        game_history: list[list[list[bool]]] = [deepcopy(game_map)]  # Stores all maps during this simulation
     end_message: str
     
     while True:
         os.system("cls" if os.name == "nt" else "clear")
         print(strmap(game_map))
         game_map = next_round(game_map)
-        game_history.append(deepcopy(game_map))
         
-        if _AUTOSTOP and game_map in game_history[:-1]:  # If specific map has already occurred, it will loop
-            end_message = "Game reached stable loop"
-            break
+        if _AUTOSTOP: 
+            if game_map in game_history:  # If specific map has already occurred, it will loop
+                end_message = "Game reached stable loop"
+                break
+            game_history.append(deepcopy(game_map))
         elif _AUTOPLAY:
             sleep(_REST_IN_SECONDS)
         elif input():
