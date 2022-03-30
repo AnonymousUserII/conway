@@ -1,3 +1,4 @@
+from glob import glob
 import os
 from time import sleep
 from copy import deepcopy
@@ -10,7 +11,9 @@ _HEIGHT: int = 30;
 _SHOW_EMOJIS: bool = True  # Won't show emojis if running windows
 _AUTOSTOP: bool = True
 _AUTOPLAY: bool = True
-_REST_IN_SECONDS: float = 1
+_REST_IN_SECONDS: float = 0.1
+
+_MOVES: int = 0
 
 
 def strmap(map: list[list[bool]]) -> str:
@@ -48,7 +51,8 @@ def next_round(map: list[list[bool]]) -> list[list[bool]]:
     for y in range(_HEIGHT):
         for x in range(_LENGTH):
             map[y][x] = will_be_alive(x, y, old_map)
-            
+    global _MOVES
+    _MOVES += 1
     return map
 
 
@@ -109,6 +113,8 @@ def main() -> None:
         
         if _AUTOSTOP: 
             if game_map in game_history:  # If specific map has already occurred, it will loop
+                game_history.append(deepcopy(game_map))
+                print(strmap(game_map))
                 end_message = "Game reached stable loop"
                 break
             game_history.append(deepcopy(game_map))
@@ -118,7 +124,7 @@ def main() -> None:
             end_message = "Player Halted"
             break  # Stops if user inputs something
     
-    print("Game Over\nReason:", end_message)
+    print("Game Over\nReason:", end_message, "\nMoves Taken:", _MOVES - 1)
     return None
     
 
