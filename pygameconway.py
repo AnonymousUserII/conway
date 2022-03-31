@@ -52,7 +52,7 @@ def output_map(map: list[list[bool]]) -> None:
     pygame.display.update()
 
 
-def starting_pattern(map: list[list[bool]]) -> list[list[bool]]:
+def starting_pattern() -> list[list[bool]]:
     """
     Put your customizations in here
     """
