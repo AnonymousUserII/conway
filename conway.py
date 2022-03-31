@@ -28,7 +28,7 @@ def strmap(map: list[list[bool]]) -> str:
     return output
 
 
-def will_be_alive(x: int, y: int, map: list[list[bool]]) -> True:
+def will_be_alive(x: int, y: int, map: list[list[bool]]) -> bool:
     alive_neighbours: int = 0
     x_bounds: set[int] = {-1 if x > 0 else 0, 0, 1 if (x < _HEIGHT - 1) else 0}
     y_bounds: set[int] = {-1 if y > 0 else 0, 0, 1 if (y < _LENGTH - 1) else 0}
