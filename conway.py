@@ -7,7 +7,7 @@ _HEIGHT: int = 30;
 _LENGTH: int = 30;
 
 # Quality of Life
-_SHOW_EMOJIS: bool = False  # Won't show emojis if running windows
+_USE_EMOJIS: bool = True  # Won't show emojis if running windows
 _AUTOSTOP: bool = True
 _AUTOPLAY: bool = True
 _REST_IN_SECONDS: float = 0.1
@@ -20,15 +20,15 @@ def strmap(map: list[list[bool]]) -> str:
     for x in map:
         for y in x:
             if y:
-                output += '# ' if os.name == "nt" or not _SHOW_EMOJIS else '⬛️'
+                output += '# ' if os.name == "nt" or not _USE_EMOJIS else '⬛️'
             else:
-                output += '. ' if os.name == "nt" or not _SHOW_EMOJIS else '⬜️'
+                output += '. ' if os.name == "nt" or not _USE_EMOJIS else '⬜️'
         output += '\n'
     
     return output
 
 
-def will_be_alive(x: int, y: int, map: list[list[bool]]) -> bool:
+def will_be_alive(x: int, y: int, map: list[list[bool]]) -> True:
     alive_neighbours: int = 0
     x_bounds: set[int] = {-1 if x > 0 else 0, 0, 1 if (x < _HEIGHT - 1) else 0}
     y_bounds: set[int] = {-1 if y > 0 else 0, 0, 1 if (y < _LENGTH - 1) else 0}
@@ -56,23 +56,33 @@ def next_round(map: list[list[bool]]) -> list[list[bool]]:
     return map
 
 
-def main() -> None: 
-    # Set all initial tiles to dead
-    game_map: list[list[bool]] = [[False for _ in range(_LENGTH)] for _ in range(_HEIGHT)]
+def starting_pattern() -> list[list[bool]]:
+    """
+    Put your customizations in here
+    """
+    # All cells are initially dead
+    map = [[False for _ in range(_LENGTH)] for _ in range(_HEIGHT)]
     
     # Preset Glider
-    game_map[5][3] = True  # Left Square
-    game_map[5][4] = True
-    game_map[5][5] = True
-    game_map[4][5] = True
-    game_map[3][4] = True  # Right Square
+    map[5][3] = True
+    map[5][4] = True
+    map[5][5] = True
+    map[4][5] = True
+    map[3][4] = True
     
+    return map
+
+
+def main() -> None: 
+    # Create starting map
+    game_map: list[list[bool]] = starting_pattern()
     
+    end_message: str
     if _AUTOSTOP:
         game_gens: list[list[list[bool]]] = [deepcopy(game_map)]  # Stores all maps during this simulation
-    end_message: str
     
-    while True:
+    running: bool = True
+    while running:
         os.system("cls" if os.name == "nt" else "clear")
         print(f"Generation: {_GENERATION}")
         print(strmap(game_map))
@@ -83,17 +93,17 @@ def main() -> None:
                 game_gens.append(deepcopy(game_map))
                 print(strmap(game_map))
                 end_message = "Game reached stable loop"
-                break
+                running = False
             game_gens.append(deepcopy(game_map))
         if _AUTOPLAY:
             try:
                 sleep(_REST_IN_SECONDS)
             except KeyboardInterrupt:
                 end_message = "Player Suspended Process"
-                break
+                running = False
         elif input():
             end_message = "Player Halted"
-            break  # Stops if user inputs something
+            running = False  # Stops if user inputs something to console
     
     print("Game Over\nReason:", end_message, "\nGeneration:", _GENERATION - 1)
     return None
